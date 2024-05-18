@@ -3,11 +3,11 @@
 
 This repository contains the code used to produce the results in Section 4.1 of the [paper](): *On Robust Reinforcement Learning with Lipschitz-Bounded Policy Networks*. See [here](https://github.com/acfr/Lipschitz-RL-Atari) for the code used to produce the results in Section 4.2.
 
-The code in this repository has been structured so that it is extensible to training and evaluating Lipschitz-bounded policies on any other environment in MJX. Please feel free to install it and play around with your favourite robotic environments, or re-create the figures from our paper. 
+The code in this repository has been structured so that it is extensible to training and evaluating Lipschitz-bounded policies on any other environment in MJX. Please feel free to install it and play around with your favourite robotic environments or re-create the figures from our paper. 
 
 ## Installation
 
-This code is based on MuJoCo's JAX implementation, [MJX](https://mujoco.readthedocs.io/en/stable/mjx.html), and the RL libraries in [Brax](https://github.com/google/brax). There are two ways to install all the dependencies and get started. We recommend the following as the easiest way to get started:
+This code is based on MuJoCo's JAX implementation, [MJX](https://mujoco.readthedocs.io/en/stable/mjx.html), and the RL libraries in [Brax](https://github.com/google/brax). There are two ways to install all the dependencies. We recommend the following as the easiest way to get started:
 - Use a local install in a virtual environment for all development and results analysis.
 - Use the docker image for training models across multiple GPUs on a server/cluster/different workstation.
 
@@ -60,7 +60,7 @@ The repository is structured as follows:
 - `liprl/`: contains all the tools used to train models, run experiments, collect data, and analyse results wrapped up in a (locally) pip-installable package.
 
 - `results/`: contains all trained models and results:
-    - `results/paper-plots/`: contains all figures included in the paper.
+    - `results/paper-plots/`: contains all figures included in Section 4.1 of the paper.
     - `results/pendulum`: contains trained models and adversarial attack/sample delay data used to create the plots in `results/paper-plots/`.
 
 - `scripts/pendulum/`: contains scripts for running and analysing experiments on the pendulum environment. Some explanation on the naming convention below:
