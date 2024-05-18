@@ -143,12 +143,12 @@ def plot_pendulum_timedomain_sims(e: ExperimentAnalyser,
     
     # Add some red lines for the target states
     fig, ax = plt.subplots(figsize=(6,3.5))
-    ax.plot(t, np.zeros(t.shape), 'r--', linewidth=1.0)
-    ax.plot(t, 2*np.ones(t.shape), 'r--', linewidth=1.0)
-    ax.plot(t, -2*np.ones(t.shape), 'r--', linewidth=1.0)
+    ax.plot(t, np.zeros(t.shape), 'r--', linewidth=1.2)
+    ax.plot(t, 2*np.ones(t.shape), 'r--', linewidth=1.2)
+    ax.plot(t, -2*np.ones(t.shape), 'r--', linewidth=1.2)
     
     # Plot the norm of the states in the time domain
-    ax.plot(t, theta / np.pi, color="grey", linewidth=0.25, alpha=0.25)
+    ax.plot(t, theta / np.pi, color="grey", linewidth=0.42, alpha=0.42)
     
     # Format the figure
     ax.set_xlabel("Time (s)")
