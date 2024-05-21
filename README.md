@@ -1,7 +1,7 @@
 # Lipschitz-Bounded Policy Networks for RL in MJX
 
 
-This repository contains the code used to produce the results in Section 4.1 of the [paper](): *On Robust Reinforcement Learning with Lipschitz-Bounded Policy Networks*. See [here](https://github.com/nic-barbara/Lipschitz-RL-Atari) for the code used to produce the results in Section 4.2.
+This repository contains the code used to produce the results in Section 4.1 of the [paper](https://arxiv.org/abs/2405.11432): *On Robust Reinforcement Learning with Lipschitz-Bounded Policy Networks*. See [here](https://github.com/nic-barbara/Lipschitz-RL-Atari) for the code used to produce the results in Section 4.2.
 
 The code in this repository has been structured so that it is extensible to training and evaluating Lipschitz-bounded policies on any other environment in MJX. Please feel free to install it and play around with your favourite robotic environments or re-create the figures from our paper. 
 
