@@ -28,7 +28,7 @@ Install all the dependencies and the project package itself from within the proj
     pip install -r requirements.txt
     pip install -e .
 
-The third line installs the local package `lbnn` itself. The `requirements.txt` file was generated with [`pipreqs`](https://github.com/bndr/pipreqs). **Most importantly,** you will need to set up JAX to find and use your NVIDIA GPU with the following.
+The third line installs the local package `liprl` itself. The `requirements.txt` file was generated with [`pipreqs`](https://github.com/bndr/pipreqs). **Most importantly,** you will need to set up JAX to find and use your NVIDIA GPU with the following.
 
     pip install -U "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
