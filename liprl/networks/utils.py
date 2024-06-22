@@ -15,7 +15,7 @@ Initializer = Callable[..., Any]
 def l2_norm(x, eps=jnp.finfo(jnp.float32).eps, **kwargs):
     """Compute l2 norm of a vector/matrix with JAX.
     This is safe for backpropagation, unlike `jnp.linalg.norm`."""
-    return jnp.sqrt(jnp.maximum(jnp.sum(x**2, **kwargs), eps))
+    return jnp.sqrt(jnp.sum(x**2, **kwargs) + eps)
 
 
 def cayley(W, return_split=False):
@@ -42,8 +42,9 @@ def dot_lax(input1, input2, precision: PrecisionLike = None):
     """Wrapper around lax.dot_general(). Use this instead of `@` for
     more efficient array-matrix multiplication and backpropagation.
     
-    NOTE: `@` might actually just default back to this anyway. Look
-    into this later.
+    NOTE: `@` actually just defaults back to this anyway. This way just
+          avoids having to always write x @ A.T when mathematically we
+          mean matmul(A,x) for x a column vector.
     """
     return lax.dot_general(
         input1,
@@ -67,10 +68,7 @@ def estimate_lipschitz_lower(
     """
     Estimate a lower-bound on the Lipschitz constant with gradient descent.
     
-    NOTE: this function is written for static models. See Julia version
-          for code that will work on dynamic models (eg: LSTM).
-          
-    https://github.com/nic-barbara/CDC2023-YoulaREN/blob/main/src/Robustness/utils.jl
+    NOTE: this function is written for static models only.
     """
     
     # Initialise model inputs
@@ -99,15 +97,19 @@ def estimate_lipschitz_lower(
     optimizer_state = optimizer.init(params)
 
     # Loss function
-    def lip_loss(params):
+    def lip_loss(params, key):
         u1, u2 = params
-        key = jax.random.PRNGKey(0)
-        key, rng1, rng2 = jax.random.split(key, 3)
+        rng1, rng2 = jax.random.split(key)
         
         y1, _ = policy(u1, rng1)
         y2, _ = policy(u2, rng2)
         
-        return l2_norm(y2 - y1) / l2_norm(u1 - u2)
+        # There are numerical precision issues with JITting 
+        # this function due to the potentially very small denominator.
+        # Mitigate with larger `+ eps` on denominator.
+        # See: https://github.com/google/jax/issues/3827
+        gamma = l2_norm(y2 - y1) / l2_norm(u1 - u2, eps=1e-5)
+        return gamma
 
     # Gradient of the loss function
     grad_loss = jax.grad(lip_loss)
@@ -118,14 +120,14 @@ def estimate_lipschitz_lower(
     lips = []
     for iter in range(max_iter):
         
-        grad_value = jit_grad_loss(params)
+        key, rng1, rng2 = jax.random.split(key, 3)
+        grad_value = jit_grad_loss(params, rng1)
         updates, optimizer_state = optimizer.update(grad_value, optimizer_state)
         params = optax.apply_updates(params, updates)
         
-        lips.append(jit_lip_loss(params))
-        if verbose and iter % 10 == 0:
-            print("Iter: ", iter, "\t L: ", lips[-1], "\t η: ", 
+        lips.append(jit_lip_loss(params, rng2))
+        if verbose and iter % 20 == 0:
+            print("Iter: ", iter, "\t L: ", lips[-1], "\t lr: ", 
                   optimizer_state[1].hyperparams['learning_rate'])
     
     return max(lips)
-    
