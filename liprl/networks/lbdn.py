@@ -67,7 +67,7 @@ class SandwichLayer(nn.Module):
                         (jnp.shape(inputs)[-1]+self.features, self.features), 
                         self.param_dtype)
         
-        a = self.param('a', init.constant(jnp.linalg.norm(xy)), (1,), self.param_dtype)
+        a = self.param('a', init.constant(l2_norm(xy)), (1,), self.param_dtype)
         
         if self.use_bias: 
             b = self.param('b', self.bias_init, (self.features,), self.param_dtype)
@@ -86,7 +86,7 @@ class SandwichLayer(nn.Module):
             if self.use_bias:
                 return dot_lax(inputs, B) + b
             else:
-                dot_lax(inputs, B)
+                return dot_lax(inputs, B)
                 
         # Regular sandwich layer (clip d to avoid over/underflow)
         psi_d = jnp.exp(jnp.clip(d, a_min=-20.0, a_max=20.0))

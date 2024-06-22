@@ -10,19 +10,15 @@ class ExperimentAnalyser(Experiment):
                  env_name: str, 
                  full_fpath: str = "", 
                  deterministic: bool = True,
-                 jit_policy: bool =True):
+                 **kwargs):
         
         # Load the experiment
         super().__init__(env_name)
-        self.load_config(full_fpath=full_fpath, deterministic=deterministic)
+        self.load_config(full_fpath=full_fpath, deterministic=deterministic, **kwargs)
         
         # Check if correctly loaded
         self._check_config_loaded()
         self._check_trained()
-        
-        # JIT the policy
-        if jit_policy:
-            self.policy = jax.jit(self.policy)
 
     def setup_batch_eval(self,
                          seed: int = 0,
