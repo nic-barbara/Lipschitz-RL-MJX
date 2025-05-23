@@ -4,6 +4,7 @@ cycler==0.12.1
 etils==1.7.0
 flax==0.8.1
 jax==0.4.24
+jaxlib==0.4.24
 matplotlib==3.8.3
 mediapy==1.2.0
 mujoco==3.1.3

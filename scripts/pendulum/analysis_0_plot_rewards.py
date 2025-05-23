@@ -58,8 +58,8 @@ fig, ax = plt.subplots()
 xmax = 0
 for network in results:
     x = np.array(results[network]["steps"]) / 1e6
-    y = np.array(results[network]["rewards"])
-    y_err = np.array(results[network]["stdev"])
+    y = -np.array(results[network]["rewards"])
+    y_err = -np.array(results[network]["stdev"])
     
     lstyle = "dotted" if network == "Unconstrained" else "solid"
     
@@ -70,6 +70,9 @@ if do_title: ax.set_title("Tuned models on {} environment".format(env_name))
 ax.set_xlabel("Environment steps ($\\times 10^6$)")
 ax.set_ylabel("Reward")
 ax.set_xlim(0, 20)
+ax.set_yscale("log")
+ax.invert_yaxis()
+ax.set_yticks([1e2,1e3],["$-10^{2}$","$-10^{3}$"])
 ax.legend(loc="lower right")
 
 fig.tight_layout()

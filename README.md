@@ -15,7 +15,20 @@ This code is based on MuJoCo's JAX implementation, [MJX](https://mujoco.readthed
 
 All code was tested and developed in Ubuntu 22.04 with CUDA 12.3 and Python 3.10.12. To run any of the code in this repository, you will need a CUDA-compatible NVIDIA GPU.
 
-### Using Python virtual environments
+### Using Docker (Recommended)
+
+Build the docker container from the project root directory (this might take a while):
+
+    cd <repo/root/directory/>
+    docker build -t lipschitz_rl docker/
+
+This will install all dependencies (including CUDA). Training scripts can then be run with
+
+    ./docker/scripts/train_attack_pendulum.sh
+
+Note that you will first need to specify your local path to the repository in the training script.
+
+### Using Python virtual environments (Not Recommended, see [#2](https://github.com/nic-barbara/Lipschitz-RL-MJX/issues/2))
 
 Create a Python virtual environment and activate it:
 
@@ -28,27 +41,14 @@ Install all the dependencies and the project package itself from within the proj
     pip install -r requirements.txt
     pip install -e .
 
-The third line installs the local package `liprl` itself. The `requirements.txt` file was generated with [`pipreqs`](https://github.com/bndr/pipreqs). **Most importantly,** you will need to set up JAX to find and use your NVIDIA GPU with the following.
-
-    pip install -U "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-
 All plots use LaTeX font as the default. This requires a local install of LaTeX. Note that the default distribution of LaTeX on Ubuntu is not enough. Install the extra packages with the following:
 
     sudo apt update && sudo apt upgrade
     sudo apt install texlive-full
 
-### Using Docker 
+To efficiently train models, you will also need to set up JAX to find and use your NVIDIA GPU with the following (warnging: see [#2](https://github.com/nic-barbara/Lipschitz-RL-MJX/issues/2)).
 
-Build the docker container from the project root directory (this might take a while):
-
-    cd <repo/root/directory/>
-    docker build -t lipschitz_rl docker/
-
-This will install all dependencies (including CUDA). Training scripts can then be run with
-
-    ./docker/scripts/train_attack_pendulum.sh
-
-Note that you will first need to specify your local path to the repository in the training script.
+    pip install -U "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
 
 ## Repository structure
